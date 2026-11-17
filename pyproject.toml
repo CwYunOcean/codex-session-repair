@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "codex-session-repair"
+version = "0.1.0"
+description = "Offline, reversible recovery of Codex sessions after a Responses backend switch"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+dependencies = []
+keywords = ["codex", "responses-api", "cc-switch", "session-recovery"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Utilities",
+]
+
+[project.urls]
+Repository = "https://github.com/CwYunOcean/codex-session-repair"
+Issues = "https://github.com/CwYunOcean/codex-session-repair/issues"
+
+[project.scripts]
+codex-session-repair = "codex_session_repair.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["codex_session_repair*"]
