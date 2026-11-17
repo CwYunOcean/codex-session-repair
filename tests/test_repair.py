@@ -279,7 +279,7 @@ http_headers = { Authorization = "SECRET_HEADER" }
         new_path = self.path.with_name(self.path.stem + "_aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee.jsonl")
         new_path.write_bytes(self.path.read_bytes())
         add_pagination_indexes(self.home, new_path)
-        self.assertEqual(find_session(self.home, SESSION_ID), new_path)
+        self.assertTrue(find_session(self.home, SESSION_ID).samefile(new_path))
         with self.assertRaises(RepairError):
             apply_plan(make_plan(self.snapshot()), self.home, offline=True)
 
@@ -287,7 +287,7 @@ http_headers = { Authorization = "SECRET_HEADER" }
         self.path.with_name("copy-" + SESSION_ID + ".jsonl").write_bytes(self.path.read_bytes())
         with self.assertRaises(RepairError):
             find_session(self.home, SESSION_ID)
-        self.assertEqual(find_session(self.home, str(self.path)), self.path)
+        self.assertTrue(find_session(self.home, str(self.path)).samefile(self.path))
 
     def test_apply_rejects_file_outside_selected_home(self):
         other_home = Path(self.temporary.name) / "other"
@@ -309,7 +309,7 @@ http_headers = { Authorization = "SECRET_HEADER" }
         self.path.rename(archived)
         self.assertEqual(list_sessions(self.home), [])
         self.assertEqual(len(list_sessions(self.home, include_archived=True)), 1)
-        self.assertEqual(find_session(self.home, SESSION_ID), archived)
+        self.assertTrue(find_session(self.home, SESSION_ID).samefile(archived))
 
     def test_real_cross_process_native_lock_prevents_writes(self):
         lock_path = self.home / "thread-writer-locks" / (SESSION_ID + ".lock")

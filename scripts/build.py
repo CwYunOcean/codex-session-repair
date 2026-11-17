@@ -1,10 +1,13 @@
 """Build deterministic zip/zipapp releases with the Python standard library."""
 
 import hashlib
+import sys
 import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from codex_session_repair import __version__
 
 
 def write_zip(output, files):
@@ -33,13 +36,13 @@ def main():
         ".github/workflows/ci.yml", ".github/ISSUE_TEMPLATE/bug_report.yml",
     ):
         files[name] = (ROOT / name).read_bytes()
-    write_zip(destination / "codex-session-repair-0.1.0.zip", files)
+    source_archive = destination / f"codex-session-repair-{__version__}.zip"
+    write_zip(source_archive, files)
     hashes = []
-    for path in sorted(destination.glob("*")):
-        if path.suffix in {".zip", ".pyz"}:
-            digest = hashlib.sha256(path.read_bytes()).hexdigest()
-            hashes.append(digest + "  " + path.name)
-            print(path)
+    for path in sorted([source_archive, destination / "codex-session-repair.pyz"]):
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        hashes.append(digest + "  " + path.name)
+        print(path)
     (destination / "SHA256SUMS.txt").write_text("\n".join(hashes) + "\n", encoding="utf-8", newline="\n")
 
 

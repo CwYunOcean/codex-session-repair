@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "codex-session-repair"
-version = "0.1.0"
+version = "0.1.1"
 description = "Offline, reversible recovery of Codex sessions after a Responses backend switch"
 readme = "README.md"
 requires-python = ">=3.11"

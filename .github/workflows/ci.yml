@@ -18,16 +18,16 @@ jobs:
         python: ["3.11", "3.12", "3.13"]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python }}
       - run: python -m unittest discover -v
       - run: python scripts/reproduce.py
       - run: python scripts/build.py
       - run: python dist/codex-session-repair.pyz --help
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: matrix.os == 'ubuntu-latest' && matrix.python == '3.12'
         with:
-          name: codex-session-repair-0.1.0
+          name: codex-session-repair
           path: dist/*
